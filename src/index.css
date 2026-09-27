@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Theme Variables System */
+:root, [data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-elevated: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --accent-primary: #0f172a;
+  --accent-text: #ffffff;
+  --accent-badge-bg: #0f172a;
+  --accent-badge-text: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --shadow-color: rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="midnight"] {
+  --bg-primary: #0b0f17;
+  --bg-secondary: #111827;
+  --bg-card: #1f2937;
+  --bg-elevated: #374151;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-color: #1f2937;
+  --border-hover: #374151;
+  --accent-primary: #38bdf8;
+  --accent-text: #0f172a;
+  --accent-badge-bg: #38bdf8;
+  --accent-badge-text: #0f172a;
+  --glass-bg: rgba(11, 15, 23, 0.85);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="paper"] {
+  --bg-primary: #fbf9f5;
+  --bg-secondary: #f3efe6;
+  --bg-card: #ffffff;
+  --bg-elevated: #eae4d8;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #a8a29e;
+  --border-color: #e7e5e4;
+  --border-hover: #d6d3d1;
+  --accent-primary: #1c1917;
+  --accent-text: #fbf9f5;
+  --accent-badge-bg: #1c1917;
+  --accent-badge-text: #fbf9f5;
+  --glass-bg: rgba(251, 249, 245, 0.85);
+  --shadow-color: rgba(28, 25, 23, 0.05);
+}
+
+[data-theme="monochrome"] {
+  --bg-primary: #000000;
+  --bg-secondary: #0d0d0d;
+  --bg-card: #141414;
+  --bg-elevated: #262626;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --border-color: #262626;
+  --border-hover: #404040;
+  --accent-primary: #ffffff;
+  --accent-text: #000000;
+  --accent-badge-bg: #ffffff;
+  --accent-badge-text: #000000;
+  --glass-bg: rgba(0, 0, 0, 0.85);
+  --shadow-color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="soft-slate"] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --bg-card: #ffffff;
+  --bg-elevated: #cbd5e1;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --border-hover: #94a3b8;
+  --accent-primary: #1e293b;
+  --accent-text: #ffffff;
+  --accent-badge-bg: #1e293b;
+  --accent-badge-text: #ffffff;
+  --glass-bg: rgba(241, 245, 249, 0.85);
+  --shadow-color: rgba(30, 41, 59, 0.08);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Glassmorphism helpers */
+.glass-header {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-card {
+  background-color: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+}
+
+/* Utility Theme Helper Classes */
+.theme-bg-primary {
+  background-color: var(--bg-primary);
+  transition: background-color 0.5s ease;
+}
+
+.theme-bg-secondary {
+  background-color: var(--bg-secondary);
+  transition: background-color 0.5s ease;
+}
+
+.theme-bg-card {
+  background-color: var(--bg-card);
+  transition: background-color 0.5s ease;
+}
+
+.theme-bg-elevated {
+  background-color: var(--bg-elevated);
+  transition: background-color 0.5s ease;
+}
+
+.theme-text-primary {
+  color: var(--text-primary);
+  transition: color 0.5s ease;
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+  transition: color 0.5s ease;
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+  transition: color 0.5s ease;
+}
+
+.theme-border {
+  border-color: var(--border-color);
+  transition: border-color 0.5s ease;
+}
+
+.theme-border-hover:hover {
+  border-color: var(--border-hover);
+}
+
+.theme-btn-accent {
+  background-color: var(--accent-primary);
+  color: var(--accent-text);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hide scrollbar helper */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
