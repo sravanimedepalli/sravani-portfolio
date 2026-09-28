@@ -1,123 +1,107 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const ENABLE_INTRO_ANIMATION = true;
-
 const LaunchScreen = ({ onComplete }) => {
   const [step, setStep] = useState(1);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Check prefers-reduced-motion
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches || !ENABLE_INTRO_ANIMATION) {
-      onComplete?.();
-      return;
-    }
+    // Required Exact Sequence Timing:
+    // STEP 1: SM Monogram (0.0s - 1.0s) -> fade/scale out
+    // STEP 2: Sravani Medepalli (1.0s - 2.1s) -> fade/scale out
+    // STEP 3: AI/ML Student (2.1s - 3.1s) -> fade out
+    // STEP 4: Reveal Portfolio (3.1s - 3.6s) -> STOP
 
-    // Step 1: Monogram SM (0 - 700ms)
-    // Step 2: Full Name (700ms - 1400ms)
-    // Step 3: Role (1400ms - 2000ms)
-    // Step 4: Progress Line (2000ms - 2500ms)
-    // Step 5: Fade Up Out (2500ms - 3000ms)
+    const timer1 = setTimeout(() => {
+      setStep(2);
+    }, 1000);
 
-    const timer1 = setTimeout(() => setStep(2), 700);
-    const timer2 = setTimeout(() => setStep(3), 1400);
+    const timer2 = setTimeout(() => {
+      setStep(3);
+    }, 2100);
+
     const timer3 = setTimeout(() => {
       setStep(4);
-      // Animate progress line from 0 to 100
-      let currentProgress = 0;
-      const interval = setInterval(() => {
-        currentProgress += 5;
-        if (currentProgress >= 100) {
-          setProgress(100);
-          clearInterval(interval);
-        } else {
-          setProgress(currentProgress);
-        }
-      }, 20);
-    }, 2000);
+    }, 3100);
 
-    const timer4 = setTimeout(() => setStep(5), 2600);
-    const timer5 = setTimeout(() => {
+    const timer4 = setTimeout(() => {
       onComplete?.();
-    }, 3200);
+    }, 3600);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
       clearTimeout(timer4);
-      clearTimeout(timer5);
     };
   }, [onComplete]);
 
   return (
     <AnimatePresence>
-      {step < 5 && (
+      {step < 4 && (
         <motion.div
-          key="launch-screen"
+          key="launch-screen-overlay"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: -80, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white dark:bg-slate-950 text-slate-900 dark:text-white select-none pointer-events-auto"
+          exit={{ 
+            opacity: 0, 
+            transition: { duration: 0.5, ease: 'easeOut' } 
+          }}
+          className="fixed inset-0 z-[100] w-full h-full min-h-screen overflow-hidden flex flex-col items-center justify-center px-4 sm:px-6 select-none pointer-events-auto"
           style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
         >
-          <div className="flex flex-col items-center justify-center max-w-md px-6 text-center">
+          <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col items-center justify-center text-center px-2 min-h-[160px]">
             
-            {/* STEP 1: Monogram SM */}
-            <motion.div
-              initial={{ scale: 0.85, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="w-16 h-16 rounded-2xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center text-xl font-black tracking-wider shadow-lg mb-6"
-              style={{ backgroundColor: 'var(--accent-primary)', color: 'var(--accent-text)' }}
-            >
-              SM
-            </motion.div>
-
-            {/* STEP 2: Name Reveal */}
-            {step >= 2 && (
-              <motion.h1
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2"
-              >
-                Sravani Medepalli
-              </motion.h1>
-            )}
-
-            {/* STEP 3: Role Reveal */}
-            {step >= 3 && (
-              <motion.p
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-8"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                AI/ML Student
-              </motion.p>
-            )}
-
-            {/* STEP 4: Progress Bar */}
-            {step >= 4 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="w-48 h-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden"
-                style={{ backgroundColor: 'var(--border-color)' }}
-              >
+            <AnimatePresence mode="wait">
+              
+              {/* STEP 1: SM Monogram */}
+              {step === 1 && (
                 <motion.div
-                  className="h-full bg-slate-900 dark:bg-slate-100 rounded-full"
-                  style={{ 
-                    width: `${progress}%`,
-                    backgroundColor: 'var(--accent-primary)',
-                    transition: 'width 0.2s ease-out'
-                  }}
-                />
-              </motion.div>
-            )}
+                  key="step-sm"
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.3 } }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-lg sm:text-2xl font-black tracking-wider shadow-lg shrink-0"
+                  style={{ backgroundColor: 'var(--accent-primary)', color: 'var(--accent-text)' }}
+                >
+                  SM
+                </motion.div>
+              )}
+
+              {/* STEP 2: Name Reveal */}
+              {step === 2 && (
+                <motion.h1
+                  key="step-name"
+                  initial={{ opacity: 0, scale: 0.95, y: 8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -8, transition: { duration: 0.3 } }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-center max-w-full break-words leading-tight"
+                  style={{ fontSize: 'clamp(1.35rem, 5vw, 2.25rem)' }}
+                >
+                  Sravani Medepalli
+                </motion.h1>
+              )}
+
+              {/* STEP 3: Role Reveal */}
+              {step === 3 && (
+                <motion.div
+                  key="step-role"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8, transition: { duration: 0.3 } }}
+                  transition={{ duration: 0.4 }}
+                  className="flex flex-col items-center w-full"
+                >
+                  <p 
+                    className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-center"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
+                    AI/ML Student
+                  </p>
+                </motion.div>
+              )}
+
+            </AnimatePresence>
 
           </div>
         </motion.div>

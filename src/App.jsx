@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -21,7 +21,14 @@ function App() {
     return saved || 'light';
   });
 
+  // Launch screen state - runs ONCE on initial page load / refresh
+  const [showIntro, setShowIntro] = useState(true);
   const [introDone, setIntroDone] = useState(false);
+
+  const handleLaunchComplete = useCallback(() => {
+    setIntroDone(true);
+    setShowIntro(false); // Unmount LaunchScreen completely
+  }, []);
 
   useEffect(() => {
     // Apply theme data attribute to root <html>
@@ -39,8 +46,8 @@ function App() {
   return (
     <div className="min-h-screen transition-colors duration-500 relative">
       
-      {/* 1. Cinematic Launch Screen */}
-      <LaunchScreen onComplete={() => setIntroDone(true)} />
+      {/* 1. Cinematic Launch Screen - Unmounts permanently after single completion */}
+      {showIntro && <LaunchScreen onComplete={handleLaunchComplete} />}
 
       {/* 2. Desktop Custom Cursor */}
       <CustomCursor />
